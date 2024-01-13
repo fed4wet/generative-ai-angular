@@ -7,7 +7,6 @@ class Label extends BlockEmbed {
     const node = super.create(value) as HTMLSpanElement;
     node.innerText = value;
     node.contentEditable = 'false';
-    //this._addRemovalButton(node);
     return node;
   }
 
@@ -31,4 +30,4 @@ Label['blotName'] = 'label';
 Label['tagName'] = 'SPAN';
 Label['className'] = 'ql-label';
 
-Quill.register({'formats/label': Label});  
+Quill.register({'formats/label': Label});

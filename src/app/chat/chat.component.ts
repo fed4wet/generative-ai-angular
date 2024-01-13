@@ -1,23 +1,29 @@
-import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, ErrorHandler, OnInit, ViewChild} from '@angular/core';
 
 import {KatexOptions, MarkdownComponent, MermaidAPI} from 'ngx-markdown';
-import {ClipboardButtonComponent} from '../clipboard-button/clipboard-button.component';
+import {ClipboardButtonComponent} from '../ui-kit/clipboard-button/clipboard-button.component';
 import * as uuid from 'uuid';
-import {GoogleGenerativeAI} from "@google/generative-ai";
+import {
+  ChatSession, EnhancedGenerateContentResponse,
+  GenerateContentResult,
+  GenerativeModel,
+  GoogleGenerativeAI,
+  StartChatParams
+} from "@google/generative-ai";
 import {environment} from '../../environments/environment.development';
 import {ChatMessage} from "../types/message-chat.type";
-import {FormsModule} from "@angular/forms";
+import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {ProcessCodeBlocksPipe} from "../pipes/process-code-block.pipe";
-
+import {MermaidService} from "../mermaid/mermaid.service";
 
 
 @Component({
-  selector: 'custom-chat',
+  selector: 'chat',
   templateUrl: './chat.component.html',
   standalone: true,
   imports: [
@@ -30,17 +36,15 @@ import {ProcessCodeBlocksPipe} from "../pipes/process-code-block.pipe";
     NgStyle,
     MatIconModule,
     MatButtonModule,
-    NgForOf
+    NgForOf,
+    ReactiveFormsModule
   ],
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnInit, AfterViewChecked {
+export class ChatComponent implements OnInit, AfterViewChecked, ErrorHandler {
   @ViewChild('bottom') bottom!: ElementRef;
   @ViewChild('scroll') scroll!: ElementRef;
   readonly clipboardButton = ClipboardButtonComponent;
-  disabled: boolean = false;
-
-  title: string = 'Conversation';
   messages: Array<ChatMessage> = [];
   loading = false;
   katexOptions: KatexOptions = {
@@ -63,155 +67,33 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         .actor-man circle, line { color: #1d262f; fill:white; stroke:#1d262f; }
       `,
   };
-  model: { prompt: string } = {
-    prompt: "",
-  };
   navigator: any = window.navigator;
   MAX_SIZE_BYTES: number = 20000 - 2700; //request payload approximation 2229 TODO: expose these from the client
-  gemini: any;
-  chat: any;
+  geminiModel: GenerativeModel | undefined;
+  chat!: ChatSession;
+  input: FormControl<string | null> = new FormControl<string>("");
+
+  constructor(private mermaidService: MermaidService) {
+  }
+
+  handleError(error: any): void {
+    throw new Error('Method not implemented.');
+  }
 
 
   ngOnInit(): void {
     this.messages.push({
       id: uuid.v4(),
-      text: `
-          **MermaidJS for diagrams**
-          \`\`\`mermaid
-          sequenceDiagram
-          Alice->>+John: Hello John, how are you?
-          Alice->>+John: John, can you hear me?
-          John-->>-Alice: Hi Alice, I can hear you!
-          John-->>-Alice: I feel great!
-          \`\`\`
-
-          \`\`\`mermaid
-            flowchart TD
-            A[Christmas] -->|Get money| B(Go shopping)
-            B --> C{Let me think}
-            C -->|One| D[Laptop]
-            C -->|Two| E[iPhone]
-            C -->|Three| F[fa:fa-car Car]
-          \`\`\`
-
-          \`\`\`mermaid
-          classDiagram
-          Animal <|-- Duck
-          Animal <|-- Fish
-          Animal <|-- Zebra
-          Animal : +int age
-          Animal : +String gender
-          Animal: +isMammal()
-          Animal: +mate()
-          class Duck{
-            +String beakColor
-            +swim()
-            +quack()
-          }
-          class Fish{
-            -int sizeInFeet
-            -canEat()
-          }
-          class Zebra{
-            +bool is_wild
-            +run()
-          }
-          \`\`\`
-
-          \`\`\`mermaid
-          stateDiagram-v2
-          [*] --> Still
-          Still --> [*]
-          Still --> Moving
-          Moving --> Still
-          Moving --> Crash
-          Crash --> [*]
-          \`\`\`
-
-          \`\`\`mermaid
-          erDiagram
-          CUSTOMER }|..|{ DELIVERY-ADDRESS : has
-          CUSTOMER ||--o{ ORDER : places
-          CUSTOMER ||--o{ INVOICE : "liable for"
-          DELIVERY-ADDRESS ||--o{ ORDER : receives
-          INVOICE ||--|{ ORDER : covers
-          \`\`\`
-
-          \`\`\`mermaid
-          gantt
-          title A Gantt Diagram
-          dateFormat  YYYY-MM-DD
-          section Section
-          A task           :a1, 2014-01-01, 30d
-          Another task     :after a1  , 20d
-          section Another
-          Task in sec      :2014-01-12  , 12d
-          another task      : 24d
-          \`\`\`
-
-          \`\`\`mermaid
-          gitGraph
-          commit
-          commit
-          branch develop
-          checkout develop
-          commit
-          commit
-          checkout main
-          merge develop
-          commit
-          commit
-          \`\`\`
-
-          \`\`\`mermaid
-          pie title Pets adopted by volunteers
-          "Dogs" : 386
-          "Cats" : 85
-          "Rats" : 15
-          \`\`\`
-
-          \`\`\`mermaid
-          mindmap
-          {{Google Generative AI}}
-            VertexAI
-            ::icon(fa fa-cloud)
-             (Text)
-             ::icon(fa fa-file-alt)
-             (Code)
-             ::icon(fa fa-code)
-             (Audio)
-             ::icon(fa fa-volume-up)
-             (Images)
-             ::icon(fa fa-image)
-            MakerSuite
-            ::icon(fa fa-edit)
-             [Gemini for Text]
-             ::icon(fa fa-file-alt)
-             [Gemini for Chat]
-             ::icon(fa fa-comments)
-             [Embeddings]
-             ::icon(fa fa-tasks)
-          \`\`\`
-
-          \`\`\`mermaid
-          quadrantChart
-          Campaign A: [0.3, 0.6]
-          Campaign B: [0.45, 0.23]
-          Campaign C: [0.57, 0.69]
-          Campaign D: [0.78, 0.34]
-          Campaign E: [0.40, 0.34]
-          Campaign F: [0.35, 0.78]
-          \`\`\`
-        `,
-      sender: '@gerardsans',
-      avatar: "https://pbs.twimg.com/profile_images/1688607716653105152/iL4c9mUH_400x400.jpg",
+      text: this.mermaidService.diagrams,
+      sender: '@fed4wet',
+      avatar: "https://media.licdn.com/dms/image/D4D03AQG5DE3yJNcNPA/profile-displayphoto-shrink_800_800/0/1676575729872?e=1710374400&v=beta&t=rnJdhNttPWGa29hGpO3bWtCUCF_GUcONYg3IJ3chmyc",
     });
 
     // Gemini Client
     const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(environment.API_KEY);
-    this.gemini = genAI.getGenerativeModel({model: "gemini-pro"});
+    this.geminiModel = genAI.getGenerativeModel({model: "gemini-pro"});
 
-    this.chat = this.gemini.startChat({
+    this.chat = this.geminiModel.startChat({
       history: [
         {
           role: "user",
@@ -266,64 +148,59 @@ export class ChatComponent implements OnInit, AfterViewChecked {
         top_k: 1,
         max_output_tokens: 2048,
       },
-    });
-    console.log('chat',this.chat)
+    } as StartChatParams);
   }
 
-  handleUserMessage(event: any) {
-    // ignore empty prompts
-    if (this.model.prompt.trim().length == 0) {
-      event.preventDefault();
+  handleUserMessage(event: any): void {
+    if (!this.input.value?.trim()) {
+      event?.preventDefault();
       return;
     }
 
-    this.addUserMessage(this.model.prompt);
-    setTimeout(() => {
-      this.model.prompt = ''; // reset input
-    });
+    this.sendMessage(this.input.value);
+    this.input.setValue('');
+
   }
 
-  // Helpers
-  private async addUserMessage(text: string) {
-    //let txt = text.replaceAll('\n', '\\n');
+  public async sendMessage(text: string): Promise<void> {
+    const processedText = this.processText(text);
+    this.addMessage(processedText);
+    await this.sendMessageAndHandleResponse(text);
+  }
 
-    // Split the text into code and non-code sections
-    let sections = text.split(/(```[^`]+```)/);
+  private processText(text: string): string {
+    return text.split(/(```[^`]+```)/)
+      .map((section, index) => index % 2 === 0 ? section.replace(/\n/g, "<br>") : section)
+      .join('');
+  }
 
-    // Process non-code sections and replace new lines with <br>
-    for (let i = 0; i < sections.length; i++) {
-      if (i % 2 === 0) { // Non-code sections
-        sections[i] = sections[i].replace(/\n/g, "<br>");
-      }
-    }
-
-    // Join the sections back together
-    let txt = sections.join('');
-
+  private addMessage(processedText: string): void {
     this.messages.push({
       id: uuid.v4(),
-      text: txt,
+      text: processedText,
       sender: '@fed4wet',
-      avatar: "https://media.licdn.com/dms/image/D4D03AQG5DE3yJNcNPA/profile-displayphoto-shrink_200_200/0/1676575729872?e=1710374400&v=beta&t=0ynHBNwaHK0xBKv9CWUZr7BcvLZBc8YdP9Ke0hK4vHM",
-    } as any);
+      avatar: "your-avatar-url",
+    });
     this.scrollToBottom();
+  }
 
+  private async sendMessageAndHandleResponse(text: string): Promise<void> {
     this.loading = true;
-
-    let answer;
-    if (this.disabled) {
-      answer = 'Test reply!';
-    } else {
-      const result = await this.chat.sendMessage(this.trimStringToByteLimit(text));
-      answer = (await result.response).text();
+    try {
+      const result: GenerateContentResult = await this.chat.sendMessage(this.trimStringToByteLimit(text));
+      const response: EnhancedGenerateContentResponse = await result.response;
+      if (response) {
+        this.addBotMessage(response.text());
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
       this.loading = false;
-    }
-    if (answer) {
-      this.addBotMessage(answer);
     }
   }
 
-  private addBotMessage(text: string) {
+
+  private addBotMessage(text: string): void {
     this.messages.push({
       id: uuid.v4(),
       text: text,
@@ -333,16 +210,16 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
 
-  private scrollToBottom() {
-    requestAnimationFrame(() => {
+  private scrollToBottom(): void {
+    requestAnimationFrame((): void => {
       this.scroll.nativeElement.scrollTop = this.bottom.nativeElement.offsetTop;
     });
   }
 
 
-  retry(text: string) {
+  retry(text: string): void {
     if (this.isUserMessage(text)) {
-      this.addUserMessage(text); /* retry exact prompt */
+      this.sendMessage(text);
     }
   }
 
@@ -393,7 +270,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
     return new TextDecoder().decode(trimmedBytes) + marker;
   }
-
 
 
 }

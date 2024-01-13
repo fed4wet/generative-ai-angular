@@ -18,7 +18,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {TextComponent} from './text/text.component';
 
 import {MarkdownModule, MARKED_OPTIONS, MarkedOptions, MarkedRenderer, CLIPBOARD_OPTIONS} from 'ngx-markdown';
-import {ClipboardButtonComponent} from './clipboard-button/clipboard-button.component';
+import {ClipboardButtonComponent} from './ui-kit/clipboard-button/clipboard-button.component';
 
 import {RichTextEditorModule} from './rich-text-editor/rich-text-editor.module';
 import {QuillModule} from 'ngx-quill';
@@ -56,8 +56,7 @@ export function markedOptionsFactory(): MarkedOptions {
 @NgModule({
   declarations: [
     AppComponent,
-    TextComponent,
-    ClipboardButtonComponent
+    TextComponent
   ],
   imports: [
     BrowserModule,
@@ -94,6 +93,7 @@ export function markedOptionsFactory(): MarkedOptions {
     FormsModule,
     ChatComponent,
     ProcessCodeBlocksPipe,
+    ClipboardButtonComponent,
   ],
   providers: [
     provideHttpClient(withFetch()),

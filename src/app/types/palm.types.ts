@@ -232,7 +232,7 @@ export function createMessage(
   context?: string,
   examples?: Example[],
 ): MessageRequest {
-  const prompt = createMessagePrompt(text, messages, context, examples);
+  const prompt: MessagePrompt = createMessagePrompt(text, messages, context, examples);
   const request: MessageRequest = {
     model,
     prompt,

@@ -53,7 +53,7 @@
             cdkTextareaAutosize
             cdkAutosizeMinRows="1"
             cdkAutosizeMaxRows="5"
-            [(ngModel)]="model.prompt"
+            [formControl]="input"
             (keydown.enter)="handleUserMessage($event)"
           ></textarea>
         </mat-form-field>

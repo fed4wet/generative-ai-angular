@@ -6,7 +6,7 @@ import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { RouterScrollService } from './router-scroll.service';
-import {hideAnimation, leftAnimation, optionAnimation} from "./types/hide.animation";
+import {hideAnimation, leftAnimation, optionAnimation} from "./enums/hide.animation";
 
 @Component({
   selector: 'app-root',
