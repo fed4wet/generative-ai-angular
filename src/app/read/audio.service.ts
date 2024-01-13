@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment.development';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from 'src/environments/environment.development';
 
 @Injectable()
 export class AudioService {
-  ELEVEN_LABS_VOICE_ID = environment.ELEVEN_LABS_VOICE_ID;
-  ELEVEN_LABS_API_KEY = environment.ELEVEN_LABS_API_KEY;
+  ELEVEN_LABS_VOICE_ID: string = environment.ELEVEN_LABS_VOICE_ID;
+  ELEVEN_LABS_API_KEY: string = environment.ELEVEN_LABS_API_KEY;
 
   public audio!: HTMLAudioElement;
   public source!: AudioBufferSourceNode;
@@ -16,17 +16,10 @@ export class AudioService {
     this.audio = new Audio();
   }
 
-  public setAudioSourceAndPlay(source: string): void {
-    if (this.isAudioPlaying()) return;
-    this.audio.src = source;
-    this.audio.play();
-  }
-
   public setAudioAndPlay(data: ArrayBuffer): void {
     if (this.isAudioPlaying()) return;
-    const blob = new Blob([data], { type: 'audio/mpeg' });
-    const url = URL.createObjectURL(blob);
-    this.audio.src = url;
+    const blob: Blob = new Blob([data], { type: 'audio/mpeg' });
+    this.audio.src = URL.createObjectURL(blob);
     console.log('Started playing: ' + Date.now());
     this.audio.play();
     console.log('Ended playing: ' + Date.now());
@@ -70,18 +63,18 @@ export class AudioService {
       });
   }
 
-  private playAudio(data: ArrayBuffer) {
+  private playAudio(data: ArrayBuffer): void {
     this.setAudioAndPlay(data);
   }
 
-  public async playStreamAudio(text: string) {
+  public async playStreamAudio(text: string): Promise<void> {
     await this.getStreamAudio(text);
   }
 
-  private async getStreamAudio(text: string) {
+  private async getStreamAudio(text: string): Promise<void> {
     if (this.isAudioStreamingPlaying()) return;
 
-    const streamingURL = `https://api.elevenlabs.io/v1/text-to-speech/${this.ELEVEN_LABS_VOICE_ID}/stream?optimize_streaming_latency=3`;
+    const streamingURL: string = `https://api.elevenlabs.io/v1/text-to-speech/${this.ELEVEN_LABS_VOICE_ID}/stream?optimize_streaming_latency=3`;
 
     const headers = {
       'content-type': 'application/json',
@@ -112,30 +105,29 @@ export class AudioService {
       });
   }
 
-  private async playAudioStream(audioData: ArrayBuffer) {
+  private async playAudioStream(audioData: ArrayBuffer): Promise<void> {
     //todo: add error handling
-    if (this.isAudioStreamingPlaying()) { 
+    if (this.isAudioStreamingPlaying()) {
       return;
     }
     else {
       this.audioContext = new AudioContext();
       this.source = this.audioContext.createBufferSource();
     }
-    const audioBuffer = await this.audioContext.decodeAudioData(audioData);
-    this.source.buffer = audioBuffer;
+    this.source.buffer = await this.audioContext.decodeAudioData(audioData);
     this.source.connect(this.audioContext.destination);
 
     this.source.onended = () => {
       console.log('Ended playing: ' + Date.now());
     };
 
-    let startTime = this.audioContext.currentTime + 0.1;
+    let startTime: number = this.audioContext.currentTime + 0.1;
     console.log('Started playing: ' + startTime);
     this.streamPlaying = true;
     this.source.start(startTime);
   }
 
-  pause() {
+  pause(): void {
     if (this.isAudioPlaying()) {
       this.audio.pause();
       this.audio.currentTime = 0;
@@ -148,7 +140,7 @@ export class AudioService {
     }
   }
 
-  public isAudioPlaying(){
+  public isAudioPlaying(): boolean {
     return (this.audio
       && this.audio.currentTime > 0
       && !this.audio.paused
@@ -156,10 +148,10 @@ export class AudioService {
       && this.audio.readyState > 2);
   }
 
-  public isAudioStreamingPlaying() {
+  public isAudioStreamingPlaying(): boolean {
     return (this.source
       && this.audioContext
-      && this.audioContext.state == 'running' 
+      && this.audioContext.state == 'running'
       && this.streamPlaying
     );
   }

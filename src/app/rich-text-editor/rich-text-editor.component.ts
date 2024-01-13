@@ -1,11 +1,11 @@
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
-import { ContentChange } from 'ngx-quill';
-import { Quill } from 'quill';
+import {Component, EventEmitter, HostListener, Output} from '@angular/core';
+import {ContentChange} from 'ngx-quill';
+import {DeltaStatic, Quill} from 'quill';
 import './quill-label.blot';
 import './quill-warning.blot';
 import './quill-text-only.clipboard';
 import './quill-markdown.module';
-import { promptIdeas as PROMPTS } from './prompt-ideas'
+import {promptIdeas as PROMPTS} from './prompt-ideas'
 import QuillMarkdown from 'quilljs-markdown';
 
 @Component({
@@ -18,7 +18,7 @@ export class RichTextEditorComponent {
   quillMarkDown!: any;
   @Output() editorEmpty: EventEmitter<boolean> = new EventEmitter<boolean>();
   isEditorEmpty = true;
-  @Output() speakerClicked = new EventEmitter<void>();
+  @Output() speakerClicked: EventEmitter<void> = new EventEmitter<void>();
   lastIdea = "";
   ideasArray = PROMPTS;
   usedIndices: number[] = [];
@@ -27,10 +27,10 @@ export class RichTextEditorComponent {
 
   quillConfiguration = {
     toolbar: false,
-/*     QuillMarkdown: { 
-      ignoreTags: [],
-      tags: { },
-    }, */
+    /*     QuillMarkdown: {
+          ignoreTags: [],
+          tags: { },
+        }, */
     PlainClipboard: false
     //clipboard: true,
   }
@@ -41,12 +41,6 @@ export class RichTextEditorComponent {
     this.switchIdea();
 
     this.quillMarkDown = new QuillMarkdown(quill);
-
-/*     this.quillInstance.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-      var plaintext = node.innerText
-      var Delta = Quill.import('delta')
-      return new Delta().insert(plaintext)
-    }); */
   }
 
   switchIdea() {
@@ -92,9 +86,9 @@ export class RichTextEditorComponent {
     }
   }
 
-  extractPrompt() {
-    let text = '';
-    const ops =  this.quillInstance.getContents();
+  extractPrompt(): string {
+    let text: string = '';
+    const ops: DeltaStatic = this.quillInstance.getContents();
     ops.forEach((op: any) => {
       if (op.insert?.label) {
         text += '\n\n' + op.insert.label + '\n\n';
@@ -106,20 +100,14 @@ export class RichTextEditorComponent {
   }
 
   insertAndFormatMarkdown(text: string, error: boolean = false) {
-    //remove language from markdown fences
-    /* const processedMarkdown = text.replace(/```(\w*)\n([\s\S]*?)```/g, (match, language, code) => {
-      return `\n\`\`\`\n${code}\`\`\`\n`;
-    }); */
 
-    text = `\n${text}\n`; 
-    var range = this.quillInstance.getSelection();
+
+    text = `\n${text}\n`;
+    const range = this.quillInstance.getSelection();
     if (range) {
       if (range.length > 0) return; // range selected ignore
       const index = range.index;
       const length = text.length;
-      const format = {
-        'background-color': 'rgb(0, 0, 255)'
-      };
 
       this.quillInstance.insertText(index, text, 'api');
       this.quillInstance.update('api');
@@ -140,41 +128,9 @@ export class RichTextEditorComponent {
     }
   }
 
-  insertStream(text: string) {
-    var range = this.quillInstance.getSelection();
-    if (range) {
-      if (range.length > 0) return; // range selected ignore
-      const index = range.index;
-      this.quillInstance.insertText(index, text, 'api');
-      this.quillInstance.update('api');
-    }
-  }
 
-  insertAndFormat(text: string, error: boolean = false) {
-    var range = this.quillInstance.getSelection();
-    if (range) {
-      if (range.length > 0) return; // range selected ignore
-      const index = range.index;
-      const length = text.length;
 
-      if (error) {
-        this.quillInstance.insertEmbed(index, 'warning', text, 'user');
-        this.quillInstance.update('user');
-      } else {
-        this.quillInstance.insertEmbed(index, 'label', text, 'user');
-        this.quillInstance.update('user');
-      }
-
-      /* this.quillInstance.setText(text);
-      this.quillInstance.formatText(index, length, {                   // unbolds 'hello' and set its color to blue
-        'bold': true,
-        'background-color': 'rgb(0, 0, 255)'
-      });
-      this.quillInstance.setSelection(index+length, 0); */
-    } // else cursor is not in editor
-  }
-
-  clear() {
+  clear(): void {
     if (this.quillInstance) {
       this.quillInstance.setText('');
       this.quillInstance.focus();
@@ -182,15 +138,15 @@ export class RichTextEditorComponent {
     this.switchIdea();
   }
 
-  contentChanged(change: ContentChange) {
-    const isEmpty = change.text.trim().length === 0; 
+  contentChanged(change: ContentChange): void {
+    const isEmpty = change.text.trim().length === 0;
     if (this.isEditorEmpty !== isEmpty) {
       this.isEditorEmpty = isEmpty;
       this.editorEmpty.emit(isEmpty);
     }
   }
 
-  onSpeakerClick() {
+  onSpeakerClick(): void {
     this.speakerClicked.emit();
   }
 }

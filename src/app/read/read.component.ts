@@ -4,15 +4,15 @@ import { AudioService } from './audio.service';
 @Component({
   selector: 'app-read',
   templateUrl: './read.component.html',
-  styleUrls: ['./read.component.scss']
+  standalone: true,
 })
 export class ReadComponent {
   constructor(private audio: AudioService) { }
 
-  public playTextToSpeech(text:string) {
+  public playTextToSpeech(text:string): void {
     this.audio.playTextToSpeech(text);
   }
-  public playStreamAudio(text: string) {
+  public playStreamAudio(text: string): void {
     this.audio.playStreamAudio(text);
   }
 }

@@ -4,10 +4,9 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter, map } from "rxjs/operators";
 import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
-import { hideAnimation, leftAnimation, optionAnimation } from './hide.animation';
-
 import { ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { RouterScrollService } from './router-scroll.service';
+import {hideAnimation, leftAnimation, optionAnimation} from "./types/hide.animation";
 
 @Component({
   selector: 'app-root',
@@ -18,7 +17,7 @@ import { RouterScrollService } from './router-scroll.service';
 export class AppComponent implements AfterContentChecked, AfterViewInit {
   title: string = "";
   isExpanded: boolean = false;
-  state = this.isExpanded ? 'opened' : 'closed';
+  state: string = this.isExpanded ? 'opened' : 'closed';
   selection = {
     chat: true,
     text: false,
@@ -33,25 +32,25 @@ export class AppComponent implements AfterContentChecked, AfterViewInit {
     this.state = this.isExpanded ? 'opened' : 'closed';
   }
 
-  select(option:string) {
+  select(option:string): void {
     this.selection.chat = option == "chat";
     this.selection.text = option == "text";
     this.selection.text = option == "config";
   }
 
   constructor(
-    private router: Router, 
-    private activatedRoute: ActivatedRoute, 
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private changeDetector: ChangeDetectorRef,
     private routerScrollService: RouterScrollService,
   ) {
-    
-    this.matIconRegistry.addSvgIcon( 
-      `palm`, 
-      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/palm.svg")
+
+    this.matIconRegistry.addSvgIcon(
+      `gemini`,
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/gemini.svg")
     );
     this.matIconRegistry.addSvgIcon(
       `angular`,
@@ -61,7 +60,7 @@ export class AppComponent implements AfterContentChecked, AfterViewInit {
       `sparkle`,
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/sparkle.svg")
     );
-    
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       map(() => {
@@ -77,9 +76,9 @@ export class AppComponent implements AfterContentChecked, AfterViewInit {
         }
         return null;
       })
-    ).subscribe((data: any) => {
+    ).subscribe((data: any): void => {
       if (data) {
-        this.title = `PaLM for ${data}`;
+        this.title = `Gemini for ${data}`;
         this.titleService.setTitle(this.title);
       }
     });

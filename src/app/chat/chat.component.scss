@@ -20,10 +20,7 @@
   font-size: 13.125px;
   font-weight: 600;
 
-  padding-bottom: 14px;
-  padding-left: 17.5px;
-  padding-right: 17.5px;
-  padding-top: 14px;
+  padding: 14px 17.5px;
 
   border-bottom-color: rgb(237, 241, 247);
   border-bottom-style: solid;
@@ -42,27 +39,21 @@
   border-radius: 5px;
   width: 100%;
 
-  padding-bottom: 7px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 7px;
+  padding: 7px 20px;
 }
 
 .avatar {
   display: block;
   border-radius: 50%;
   flex-shrink: 0;
-  background: #c5cee0;
-  background-position: center;
   background-size: cover;
-  background-repeat: no-repeat;
   width: 2.5rem;
   height: 2.5rem;
   text-align: center;
   line-height: 2.5rem;
   font-size: 0.875rem;
   color: white;
-  background-color: transparent;
+  background: transparent no-repeat center;
 }
 
 .avatar.bot {
@@ -78,13 +69,11 @@
 .message-content {
   background-color: #f7f9fc;
   width: 100%;
-  margin-left: 5px;
   color: black;
   border-radius: 0.5rem;
   margin-left: 10px;
-  padding: 0px 15px;
   overflow: auto;
-  padding-bottom: 20px;
+  padding: 0 15px 20px;
 }
 
 .messages {
@@ -104,9 +93,9 @@
   top: 6px;
   position: relative;
   font-family: "Source Code Pro", Consolas, Menlo, Monaco, "Andale Mono WT",
-    "Andale Mono", "Lucida Console", "Lucida Sans Typewriter",
-    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
-    "Nimbus Mono L", "Courier New", Courier, monospace;
+  "Andale Mono", "Lucida Console", "Lucida Sans Typewriter",
+  "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
+  "Nimbus Mono L", "Courier New", Courier, monospace;
   font-size: 12px;
   font-weight: 600;
 }
@@ -212,9 +201,9 @@ input.mdc-text-field__input:focus {
   padding-left: 10px;
   position: relative;
   font-family: "Source Code Pro", Consolas, Menlo, Monaco, "Andale Mono WT",
-    "Andale Mono", "Lucida Console", "Lucida Sans Typewriter",
-    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
-    "Nimbus Mono L", "Courier New", Courier, monospace;
+  "Andale Mono", "Lucida Console", "Lucida Sans Typewriter",
+  "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
+  "Nimbus Mono L", "Courier New", Courier, monospace;
   font-size: 12px;
   font-weight: 600;
   height: 15px;
@@ -255,17 +244,17 @@ input.mdc-text-field__input:focus {
 }
 
 ::ng-deep
-  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
-  .mdc-floating-label,
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+.mdc-floating-label,
 ::ng-deep
-  .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
-  .mdc-floating-label--float-above {
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+.mdc-floating-label--float-above {
   color: inherit !important;
 }
 
 ::ng-deep
-  .mdc-text-field--filled:not(.mdc-text-field--disabled)
-  .mdc-line-ripple::after {
+.mdc-text-field--filled:not(.mdc-text-field--disabled)
+.mdc-line-ripple::after {
   border-bottom-color: inherit !important;
   border-width: 1px;
 }
@@ -295,30 +284,27 @@ input.mdc-text-field__input:focus {
   height: 100%;
 }
 
+textarea {
+  font-size: 15px;
+}
+
 /* mermaid 10.5 */
 
 ::ng-deep .mermaid svg {
 
-  /*
-  text *, text, .nodeLabel, .edgeLabel {
-    font-family: "Source Code Pro", "trebuchet ms",verdana,arial,sans-serif !important;
-    font-size: 16px !important;
-    font-weight: 400 !important;
-  } */
-
   rect.actor, rect.label-container, rect.title-state, rect.er, rect.task, polygon {
-    fill: white !important; 
+    fill: white !important;
     stroke:#1d262f !important;
   }
   line {
-    fill: #1d262f !important; 
+    fill: #1d262f !important;
     stroke:#1d262f !important;
   }
   .mindmap-nodes .section-root text {
     fill: black !important;
   }
 
-  path.arrowMarkerPath { fill: #1d262f; stroke:#1d262f; } 
+  path.arrowMarkerPath { fill: #1d262f; stroke:#1d262f; }
   .node rect { fill: white; stroke:#1d262f; }
   .flowchart-link { stroke: #1d262f; fill: none; }
   .entityBox { fill: white; stroke:#1d262f; }
@@ -342,7 +328,7 @@ input.mdc-text-field__input:focus {
   justify-content: flex-start;
   height: 35px;
   padding-left: 15px;
-  padding-bottom: 0px;
+  padding-bottom: 0;
 }
 .loading .text {
   display: block;
