@@ -32,13 +32,14 @@ import {FormsModule} from '@angular/forms';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {AudioService} from "./read/audio.service";
 import {ChatComponent} from "./chat/chat.component";
+import {Renderer} from "marked";
 
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
-  const renderer = new MarkedRenderer();
+  const renderer: Renderer = new MarkedRenderer();
   const linkRenderer = renderer.link;
-  renderer.link = (href, title, text) => {
+  renderer.link = (href: string, title: string, text: string) => {
     let target: string = `target="_blank"`;
     const isSVG: boolean = text.lastIndexOf("svg") >= 0;
     if (isSVG) {

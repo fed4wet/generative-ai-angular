@@ -1,6 +1,6 @@
 .container {
-  background-color: #edf1f7;
-  box-shadow: 0 0.5rem 1rem 0 rgba(44, 51, 73, 0.1);
+  background-color: #f0f4f8;
+  box-shadow: 0 0.6rem 1.2rem 0 rgba(60, 70, 85, 0.12);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -17,8 +17,8 @@
 
 .header {
   font-family: "Google Sans", Roboto, Arial, sans-serif;
-  font-size: 13.125px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
 
   padding: 14px 17.5px;
 
@@ -43,6 +43,8 @@
 }
 
 .avatar {
+  border: 2px solid #e0e0e0;
+  background-color: #f7f7f7;
   display: block;
   border-radius: 50%;
   flex-shrink: 0;
@@ -53,7 +55,6 @@
   line-height: 2.5rem;
   font-size: 0.875rem;
   color: white;
-  background: transparent no-repeat center;
 }
 
 .avatar.bot {
@@ -118,7 +119,7 @@
   transform: scale(0.6);
   position: absolute;
   right: 1px;
-  background-color: rgba(255,255,255,1);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 50px;
   padding: 2px;
   box-shadow: 1px 1px 5px whitesmoke;
@@ -143,8 +144,9 @@ mat-form-field {
 }
 
 input.mdc-text-field__input {
-  border-bottom-color: red;
+  border-bottom-color: #4a90e2;
 }
+
 input.mdc-text-field__input:focus {
   border-bottom-color: yellow;
 }
@@ -181,10 +183,12 @@ input.mdc-text-field__input:focus {
   max-width: 500px;
   overflow: auto;
 }
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::ng-deep .mermaid::-webkit-scrollbar {
   display: none;
 }
+
 /* Hide scrollbar for IE, Edge and Firefox */
 ::ng-deep .mermaid {
   -ms-overflow-style: none; /* IE and Edge */
@@ -197,7 +201,7 @@ input.mdc-text-field__input:focus {
   display: block;
   background-color: #dde8ee;
   border: 2px solid #dde8ee;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 5px 5px 0 0;
   padding-left: 10px;
   position: relative;
   font-family: "Source Code Pro", Consolas, Menlo, Monaco, "Andale Mono WT",
@@ -263,19 +267,21 @@ input.mdc-text-field__input:focus {
   background-color: #a3a3a3 !important;
 }
 
-.header {
+.header, .messages, .form {
   position: relative;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
 }
+
 
 .messages {
   display: flex;
   flex: 1;
   overflow: auto;
-  position: relative;
+
 }
 
 .form {
-  position: relative;
   align-self: center;
   width: 100%;
 }
@@ -294,25 +300,62 @@ textarea {
 
   rect.actor, rect.label-container, rect.title-state, rect.er, rect.task, polygon {
     fill: white !important;
-    stroke:#1d262f !important;
+    stroke: #1d262f !important;
   }
+
   line {
     fill: #1d262f !important;
-    stroke:#1d262f !important;
+    stroke: #1d262f !important;
   }
+
   .mindmap-nodes .section-root text {
     fill: black !important;
   }
 
-  path.arrowMarkerPath { fill: #1d262f; stroke:#1d262f; }
-  .node rect { fill: white; stroke:#1d262f; }
-  .flowchart-link { stroke: #1d262f; fill: none; }
-  .entityBox { fill: white; stroke:#1d262f; }
-  .nodeLabel { color: #1d262f; }
-  .node polygon { fill: white; stroke:#1d262f; }
-  .actor { fill: white; stroke:#1d262f; }
-  text.actor>tspan { color: #1d262f; fill:#1d262f; }
-  .actor-man circle, line { color: #1d262f; fill:white; stroke:#1d262f; }
+  path.arrowMarkerPath {
+    fill: #1d262f;
+    stroke: #1d262f;
+  }
+
+  .node rect {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  .flowchart-link {
+    stroke: #1d262f;
+    fill: none;
+  }
+
+  .entityBox {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  .nodeLabel {
+    color: #1d262f;
+  }
+
+  .node polygon {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  .actor {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  text.actor > tspan {
+    color: #1d262f;
+    fill: #1d262f;
+  }
+
+  .actor-man circle, line {
+    color: #1d262f;
+    fill: white;
+    stroke: #1d262f;
+  }
 }
 
 .text {
@@ -330,6 +373,7 @@ textarea {
   padding-left: 15px;
   padding-bottom: 0;
 }
+
 .loading .text {
   display: block;
 }
