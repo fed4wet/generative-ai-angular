@@ -1,0 +1,78 @@
+html,
+body {
+  height: 100%;
+  font-size: 14px;
+  margin: 0;
+  min-height: 100%;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
+@import "assets/prism-base2tone-sea-light.original.css"; 
+//@import "~prismjs/themes/prism.css";
+//@import "~prismjs/themes/prism-okaidia.css";
+@import "quilljs-markdown/dist/quilljs-markdown-common-style.css";
+
+code:not([class*="language-"]) {
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: 3px;
+  font-size: 0.94em;
+  padding: 0 6px 2px;
+  overflow-wrap: break-word;
+  font-family: "Source Code Pro";
+  font-weight: 600;
+}
+
+body,
+mat-list-item *:not(mat-icon),
+mat-toolbar *:not(mat-icon) {
+  font-family: "Google Sans", Roboto, Arial, sans-serif !important;
+}
+
+h1 {
+  font-size: 17px;
+}
+h2 {
+  font-size: 16px;
+}
+h3 {
+  font-size: 15px;
+}
+h4 {
+  font-size: 14px;
+}
+h5 {
+  font-size: 13px;
+}
+h6 {
+  font-size: 12px;
+}
+
+@import "~quill/dist/quill.core.css";
+@import "~quill/dist/quill.snow.css";
+
+/* body,
+app-root,
+mat-sidenav-container,
+mat-sidenav-content,
+app-text {
+  height: 100%;
+} */
+
+/* mat-sidenav-container,
+mat-sidenav-content,
+app-text {
+  height: 560px;
+} */
+
+/* @import "~quilljs-markdown/dist/quilljs-markdown-common-style.css"; */
+
+.mat-sidenav-container,
+.mat-sidenav-content, 
+.main-content {
+  height: 100%;
+}

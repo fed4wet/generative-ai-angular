@@ -1,0 +1,379 @@
+.container {
+  background-color: #f0f4f8;
+  box-shadow: 0 0.6rem 1.2rem 0 rgba(60, 70, 85, 0.12);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: calc(100% - 65px);
+  min-width: 400px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.header,
+.messages,
+.form {
+  background-color: white;
+}
+
+.header {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+
+  padding: 14px 17.5px;
+
+  border-bottom-color: rgb(237, 241, 247);
+  border-bottom-style: solid;
+  border-bottom-width: 0.555556px;
+  border-top-left-radius: 3.5px;
+  border-top-right-radius: 3.5px;
+}
+
+.message-row {
+  padding: 1.25rem;
+}
+
+.custom-control {
+  background-color: rgb(247, 249, 252);
+  border-color: rgb(228, 233, 242);
+  border-radius: 5px;
+  width: 100%;
+
+  padding: 7px 20px;
+}
+
+.avatar {
+  border: 2px solid #e0e0e0;
+  background-color: #f7f7f7;
+  display: block;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-size: cover;
+  width: 2.5rem;
+  height: 2.5rem;
+  text-align: center;
+  line-height: 2.5rem;
+  font-size: 0.875rem;
+  color: white;
+}
+
+.avatar.bot {
+  background-size: 80%;
+}
+
+.message-container {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.message-content {
+  background-color: #f7f9fc;
+  width: 100%;
+  color: black;
+  border-radius: 0.5rem;
+  margin-left: 10px;
+  overflow: auto;
+  padding: 0 15px 20px;
+}
+
+.messages {
+  padding: 1.25rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+}
+
+::ng-deep .code-header {
+  background-color: #dde8ee;
+  border: 2px solid #dde8ee;
+  border-radius: 5px 5px 0px 0px;
+  padding-left: 10px;
+  top: 6px;
+  position: relative;
+  font-family: "Source Code Pro", Consolas, Menlo, Monaco, "Andale Mono WT",
+  "Andale Mono", "Lucida Console", "Lucida Sans Typewriter",
+  "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
+  "Nimbus Mono L", "Courier New", Courier, monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+::ng-deep .katex * {
+  font-size: 1.2rem !important;
+}
+
+::ng-deep .katex {
+  background-color: #fff;
+  padding: 1px 4px 1px 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(208, 208, 208, 0.5);
+  box-shadow: 1px 1px 1px 0px rgba(208, 208, 208, 0.2);
+}
+
+.message-content .btn-reply {
+  display: none;
+  float: right;
+  transform: scale(0.6);
+  position: absolute;
+  right: 1px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 50px;
+  padding: 2px;
+  box-shadow: 1px 1px 5px whitesmoke;
+  z-index: 1;
+}
+
+.message-content .btn-reply button {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+.message-content:hover .btn-reply {
+  display: block;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+::ng-deep mat-label {
+  font-size: 12px !important;
+}
+
+input.mdc-text-field__input {
+  border-bottom-color: #4a90e2;
+}
+
+input.mdc-text-field__input:focus {
+  border-bottom-color: yellow;
+}
+
+::ng-deep markdown code[class*="language-"],
+::ng-deep markdown pre[class*="language-"] {
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 0px;
+}
+
+::ng-deep mat-form-field .mdc-text-field--focused {
+  background-color: aliceblue;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::ng-deep markdown code[class*="language-"]::-webkit-scrollbar,
+::ng-deep markdown pre[class*="language-"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+::ng-deep markdown code[class*="language-"],
+::ng-deep markdown pre[class*="language-"] {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+::ng-deep .mermaid {
+  text-align: center;
+  background-color: white;
+  border-radius: 5px 5px 5px 5px;
+  margin-top: 10px;
+  max-width: 500px;
+  overflow: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::ng-deep .mermaid::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+::ng-deep .mermaid {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+::ng-deep .mermaid::before {
+  content: "Mermaid diagram";
+  text-align: left;
+  display: block;
+  background-color: #dde8ee;
+  border: 2px solid #dde8ee;
+  border-radius: 5px 5px 0 0;
+  padding-left: 10px;
+  position: relative;
+  font-family: "Source Code Pro", Consolas, Menlo, Monaco, "Andale Mono WT",
+  "Andale Mono", "Lucida Console", "Lucida Sans Typewriter",
+  "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
+  "Nimbus Mono L", "Courier New", Courier, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  height: 15px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+::ng-deep .mermaid svg {
+  xmax-width: 350px !important;
+  max-height: 200px !important;
+}
+
+::ng-deep svg[aria-roledescription="pie"],
+::ng-deep svg[aria-roledescription="quadrantChart"] {
+  max-width: unset !important;
+  max-height: 200px !important;
+}
+
+::ng-deep svg[aria-roledescription="mindmap"] {
+  max-width: unset !important;
+  max-height: 320px !important;
+}
+
+::ng-deep svg[aria-roledescription="gantt"] {
+  max-width: unset !important;
+  max-height: 150px !important;
+}
+
+::ng-deep svg[aria-roledescription="gitGraph"] {
+  max-width: unset !important;
+  max-height: 130px !important;
+}
+
+::ng-deep mat-form-field .mdc-text-field--filled .mdc-floating-label,
+::ng-deep mat-form-field textarea {
+  font-family: "Google Sans", Roboto, Arial, sans-serif !important;
+  caret-color: black !important;
+}
+
+::ng-deep
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+.mdc-floating-label,
+::ng-deep
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+.mdc-floating-label--float-above {
+  color: inherit !important;
+}
+
+::ng-deep
+.mdc-text-field--filled:not(.mdc-text-field--disabled)
+.mdc-line-ripple::after {
+  border-bottom-color: inherit !important;
+  border-width: 1px;
+}
+
+::ng-deep .mat-mdc-form-field-focus-overlay {
+  background-color: #a3a3a3 !important;
+}
+
+.header, .messages, .form {
+  position: relative;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+
+.messages {
+  display: flex;
+  flex: 1;
+  overflow: auto;
+
+}
+
+.form {
+  align-self: center;
+  width: 100%;
+}
+
+.root {
+  height: 100%;
+}
+
+textarea {
+  font-size: 15px;
+}
+
+/* mermaid 10.5 */
+
+::ng-deep .mermaid svg {
+
+  rect.actor, rect.label-container, rect.title-state, rect.er, rect.task, polygon {
+    fill: white !important;
+    stroke: #1d262f !important;
+  }
+
+  line {
+    fill: #1d262f !important;
+    stroke: #1d262f !important;
+  }
+
+  .mindmap-nodes .section-root text {
+    fill: black !important;
+  }
+
+  path.arrowMarkerPath {
+    fill: #1d262f;
+    stroke: #1d262f;
+  }
+
+  .node rect {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  .flowchart-link {
+    stroke: #1d262f;
+    fill: none;
+  }
+
+  .entityBox {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  .nodeLabel {
+    color: #1d262f;
+  }
+
+  .node polygon {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  .actor {
+    fill: white;
+    stroke: #1d262f;
+  }
+
+  text.actor > tspan {
+    color: #1d262f;
+    fill: #1d262f;
+  }
+
+  .actor-man circle, line {
+    color: #1d262f;
+    fill: white;
+    stroke: #1d262f;
+  }
+}
+
+.text {
+  display: none;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.message-content.loading {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 35px;
+  padding-left: 15px;
+  padding-bottom: 0;
+}
+
+.loading .text {
+  display: block;
+}

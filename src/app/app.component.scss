@@ -1,0 +1,72 @@
+.mat-icon {
+  --primary-color: #1d262f;
+  color: var(--primary-color);
+}
+
+.sidenav {
+  width: 250px;
+  transition: all 1s linear;
+}
+
+mat-list-item .option {
+  left: 20px;
+  bottom: 6px;
+  display: inline;
+  position: relative;
+  font-size: 18px;
+}
+
+.mat-toolbar {
+  background-color: #ffffff;
+}
+
+.fixed-toolbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.angular ::ng-deep .mdc-list-item__content {
+  margin-left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 400ms;
+}
+
+mat-list-item.active.expanded {
+  background-color: #e3e3e3;
+}
+mat-list-item.active {
+  background-color: white ;
+}
+
+mat-list-item.active button,
+mat-list-item.active button:active,
+mat-list-item.active button:focus,
+mat-list-item.active button:hover
+ {
+  background-color: #e3e3e3;
+}
+
+.mdc-list-item {
+  padding-left: 16px;
+  padding-right: 5px !important;
+}
+
+.angular {
+  margin-bottom: 8px;
+}
+
+mat-sidenav-content {
+  margin-top: 64px;
+}
+
+mat-list-item .option {
+  text-overflow: ellipsis;
+  display: inline-block;
+  overflow: hidden;
+  text-align: left;
+}

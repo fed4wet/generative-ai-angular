@@ -1,0 +1,66 @@
+<div class="root">
+  <div class="container chat column">
+
+    <div class="messages" #scroll>
+      <ng-container *ngFor="let message of messages; trackBy: trackByFn">
+        <div class="message-container">
+          <div class="avatar"
+               [class.bot]="message.sender == 'Bot'"
+               [ngStyle]="{'background-image': 'url(' + message.avatar + ')'}">
+          </div>
+          <div class="message-content">
+            <span *ngIf="showReply(message.text)" class="btn-reply">
+              <button mat-icon-button (click)="navigator.clipboard.writeText(message.text)">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              <button mat-icon-button (click)="message.isRaw = !message.isRaw">
+                <mat-icon>{{ !message.isRaw ? 'code' : 'visibility' }}</mat-icon>
+              </button>
+              <button mat-icon-button (click)="retry(message.text)">
+                <mat-icon>replay</mat-icon>
+              </button>
+              <button mat-icon-button (click)="delete(message.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </span>
+            <div [ngStyle]=" { 'display': message.isRaw ? 'block' : 'none' }">
+              <pre ngPreserveWhitespaces>{{ message.text }}</pre>
+            </div>
+            <markdown [ngStyle]=" { 'display': message.isRaw ? 'none' : 'block' }"
+                      ngPreserveWhitespaces emoji mermaid
+                      [mermaidOptions]="mermaidService.mermaidOptions"
+                      katex
+                      [katexOptions]="katexOptions"
+                      clipboard [clipboardButtonComponent]="clipboardButton">
+              {{ message.text | processCodeBlocks }}
+            </markdown>
+          </div>
+        </div>
+      </ng-container>
+      <div class="message-container" *ngIf="loading">
+        <div class="message-content loading">
+          <div class="text">
+            <mat-spinner [diameter]="20"></mat-spinner>
+          </div>
+        </div>
+      </div>
+      <div #bottom></div>
+    </div>
+
+    <div class="form">
+      <div class="message-row">
+        <mat-form-field>
+          <mat-label>Enter your prompt here</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"
+            [formControl]="input"
+            (keydown.enter)="handleUserMessage($event)"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>

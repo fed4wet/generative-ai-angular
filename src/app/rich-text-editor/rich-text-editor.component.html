@@ -1,0 +1,20 @@
+<div class="editor">
+  <div class="header">
+    <div class="toolbar">
+      <div>Write your prompt</div>
+      <button mat-icon-button
+              (click)="onSpeakerClick(); playing = !playing"
+              [disabled]="isEditorEmpty">
+        <mat-icon>{{ playing ? 'stop' : 'volume_up' }}</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="quill">
+    <quill-editor class="content-editor"
+                  [modules]="quillConfiguration"
+                  placeholder="Some ideas"
+                  (onEditorCreated)="editorCreated($event)"
+                  (onContentChanged)="contentChanged($event)">
+    </quill-editor>
+  </div>
+</div>
