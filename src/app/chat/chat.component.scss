@@ -1,5 +1,19 @@
+:root {
+  --bg-color: #f0f4f8;
+  --white-color: #ffffff;
+  --shadow-color: rgba(60, 70, 85, 0.12);
+  --border-color-light: rgb(237, 241, 247);
+  --border-color-dark: rgb(228, 233, 242);
+  --text-color: #1d262f;
+  --font-family-default: "Google Sans", Roboto, Arial, sans-serif;
+  --font-family-code: "Source Code Pro", Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
+  --avatar-border-color: #e0e0e0;
+  --avatar-bg-color: #f7f7f7;
+  --message-bg-color: #f7f9fc;
+}
+
 .container {
-  background-color: #f0f4f8;
+  background-color: var(--bg-color);
   box-shadow: 0 0.6rem 1.2rem 0 rgba(60, 70, 85, 0.12);
   display: flex;
   flex-direction: column;
@@ -16,7 +30,7 @@
 }
 
 .header {
-  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-family: var(--font-family-code);
   font-size: 14px;
   font-weight: 500;
 
@@ -34,8 +48,8 @@
 }
 
 .custom-control {
-  background-color: rgb(247, 249, 252);
-  border-color: rgb(228, 233, 242);
+  background-color: #f7f9fc;
+  border-color: var(--border-color);
   border-radius: 5px;
   width: 100%;
 
@@ -43,7 +57,7 @@
 }
 
 .avatar {
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   background-color: #f7f7f7;
   display: block;
   border-radius: 50%;
@@ -70,7 +84,7 @@
 .message-content {
   background-color: #f7f9fc;
   width: 100%;
-  color: black;
+  color: var(--text-color);
   border-radius: 0.5rem;
   margin-left: 10px;
   overflow: auto;
@@ -89,7 +103,7 @@
 ::ng-deep .code-header {
   background-color: #dde8ee;
   border: 2px solid #dde8ee;
-  border-radius: 5px 5px 0px 0px;
+  border-radius: 5px 5px 0 0;
   padding-left: 10px;
   top: 6px;
   position: relative;
@@ -110,7 +124,7 @@
   padding: 1px 4px 1px 4px;
   border-radius: 10px;
   border: 1px solid rgba(208, 208, 208, 0.5);
-  box-shadow: 1px 1px 1px 0px rgba(208, 208, 208, 0.2);
+  box-shadow: 1px 1px 1px 0 rgba(208, 208, 208, 0.2);
 }
 
 .message-content .btn-reply {
@@ -155,7 +169,7 @@ input.mdc-text-field__input:focus {
 ::ng-deep markdown pre[class*="language-"] {
   font-size: 12px;
   font-weight: 600;
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 ::ng-deep mat-form-field .mdc-text-field--focused {
@@ -176,11 +190,12 @@ input.mdc-text-field__input:focus {
 }
 
 ::ng-deep .mermaid {
+
   text-align: center;
   background-color: white;
   border-radius: 5px 5px 5px 5px;
   margin-top: 10px;
-  max-width: 500px;
+  max-width: 100%;
   overflow: auto;
 }
 
@@ -210,15 +225,12 @@ input.mdc-text-field__input:focus {
   "Nimbus Mono L", "Courier New", Courier, monospace;
   font-size: 12px;
   font-weight: 600;
-  height: 15px;
+  height: 10px;
   margin-bottom: 10px;
   width: 100%;
 }
 
-::ng-deep .mermaid svg {
-  xmax-width: 350px !important;
-  max-height: 200px !important;
-}
+
 
 ::ng-deep svg[aria-roledescription="pie"],
 ::ng-deep svg[aria-roledescription="quadrantChart"] {
@@ -247,17 +259,17 @@ input.mdc-text-field__input:focus {
   caret-color: black !important;
 }
 
-::ng-deep
-.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+::ng-deep,
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused,
 .mdc-floating-label,
-::ng-deep
-.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+::ng-deep,
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused,
 .mdc-floating-label--float-above {
   color: inherit !important;
 }
 
-::ng-deep
-.mdc-text-field--filled:not(.mdc-text-field--disabled)
+::ng-deep,
+.mdc-text-field--filled:not(.mdc-text-field--disabled),
 .mdc-line-ripple::after {
   border-bottom-color: inherit !important;
   border-width: 1px;

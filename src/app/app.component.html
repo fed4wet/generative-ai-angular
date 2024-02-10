@@ -7,15 +7,18 @@
     <mat-nav-list>
       <mat-list-item class="angular" (click)="toggleState()">
         <button mat-icon-button>
-          <mat-icon svgIcon="angular" style="transform:scale(1.2);"></mat-icon>
+          <mat-icon
+            svgIcon="angular"></mat-icon>
         </button>
       </mat-list-item>
       <mat-list-item routerLink="/chat"
                      routerLinkActive="active"
                      [class.expanded]="isExpanded"
                      (click)="select('chat')">
-        <button mat-icon-button (click)="select('chat')" [class.active]="selection.chat">
-          <mat-icon>chat</mat-icon>
+        <button mat-icon-button
+                (click)="select('chat')"
+                [class.active]="selection.chat">
+          <mat-icon>comment</mat-icon>
           <div [@option]="state" class="option">Gemini for Chat</div>
         </button>
       </mat-list-item>
@@ -34,7 +37,9 @@
   <mat-sidenav-content [@leftAnimation]="state" flex class="mat-sidenav-content">
     <mat-toolbar class="fixed-toolbar">
       <button mat-icon-button>
-        <mat-icon svgIcon="gemini" style="transform:scale(1.2);"></mat-icon>
+        <mat-icon svgIcon="gemini"
+                  style="transform:scale(2)">
+        </mat-icon>
       </button>
       <h1>{{ title }}</h1>
     </mat-toolbar>

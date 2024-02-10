@@ -59,9 +59,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   MAX_SIZE_BYTES: number = 30720 - 3072; //request payload approximation 2229 TODO: expose these from the client
   geminiModel!: GenerativeModel;
   chat!: ChatSession;
-  private encoder = new TextEncoder();
-  private decoder = new TextDecoder();
-
+  private encoder: TextEncoder = new TextEncoder();
+  private decoder: TextDecoder = new TextDecoder();
 
   constructor(public mermaidService: MermaidService) {
   }
@@ -246,7 +245,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
 
-
   private trimStringToByteLimit(text: string, maxSize: number = this.MAX_SIZE_BYTES): string {
     if (maxSize < 1) throw new Error("Invalid maxSize");
 
@@ -268,7 +266,6 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
     return this.decoder.decode(trimmedBytes) + marker;
   }
-
 
 
 }
