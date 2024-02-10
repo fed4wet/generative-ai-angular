@@ -82,8 +82,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   chatCreating(): void {
     const generationConfig: GenerationConfig = {
       temperature: 0.5,
-      topP: 1,
-      topK: 1,
+      topP: 0.1,
+      topK: 16,
       maxOutputTokens: 2048,
     }
 
