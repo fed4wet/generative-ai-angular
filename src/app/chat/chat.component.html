@@ -57,6 +57,7 @@
             cdkAutosizeMinRows="1"
             cdkAutosizeMaxRows="5"
             [formControl]="input"
+            [readonly]="loading"
             (keydown.enter)="handleUserMessage($event)"
           ></textarea>
         </mat-form-field>

@@ -13,7 +13,6 @@ import {
   InputContent,
 } from "@google/generative-ai";
 import {environment} from '../../environments/environment.development';
-import {ChatMessage} from "../types/message-chat.type";
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
@@ -22,6 +21,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {ProcessCodeBlocksPipe} from "../pipes/process-code-block.pipe";
 import {MermaidService} from "../mermaid/mermaid.service";
+import {ChatMessage} from "../types/message-chat.type";
 
 
 @Component({
@@ -49,16 +49,16 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   readonly clipboardButton = ClipboardButtonComponent;
   messages: ChatMessage[] = [];
   input: FormControl<string | null> = new FormControl<string>("");
+  MAX_INPUT_SIZE_BYTES: number = 30720;
+  geminiModel!: GenerativeModel;
+  chat!: ChatSession;
   loading: boolean = false;
   katexOptions: KatexOptions = {
     displayMode: true,
     throwOnError: false
   };
-
   navigator: any = window.navigator;
-  MAX_SIZE_BYTES: number = 30720 - 3072; //request payload approximation 2229 TODO: expose these from the client
-  geminiModel!: GenerativeModel;
-  chat!: ChatSession;
+
   private encoder: TextEncoder = new TextEncoder();
   private decoder: TextDecoder = new TextDecoder();
 
@@ -68,8 +68,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   ngOnInit(): void {
     this.geminiInit();
-    this.chatCreating();
-    this.addMessage(this.mermaidService.diagrams);
+    this.geminiChatInit();
+    this.addUserMessageToUI(this.mermaidService.diagrams);
   }
 
   ngAfterViewChecked(): void {
@@ -79,13 +79,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
 
-  chatCreating(): void {
+  geminiChatInit(): void {
     const generationConfig: GenerationConfig = {
       temperature: 0.5,
       topP: 0.1,
       topK: 16,
-      maxOutputTokens: 2048,
-      stopSequences: ["AI"]
+      maxOutputTokens: 2048
     }
 
     this.chat = this.geminiModel.startChat({
@@ -105,24 +104,17 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     return [
       {
         role: "user",
-        parts: "Keep your answers brief and to a single paragraph. Use markdown formatting extensively, Katex for formulas and MermaidJS for diagrams. Do not use other formats. Always specify the language in code fences. Eg: ```HTML. Try to use at least one or more of these special formatting options when providing your answers. Pay special attention to indentation when using MermaidJS and be very conservative using features to avoid syntax errors. Reply understood if you got everything.",
+        parts: "All text in YOUR answers should be in `UPPER CASE` and in French language",
       },
       {
         role: "model",
         parts: "Understood.",
-      },
-      {
-        role: "user",
-        parts: "Difference between Constructor and ngOnInit? Answer: The constructor is called when an **Angular component** is created, while `ngOnInit` is called after the component's data has been initialized. This means that the constructor can be used to initialize the component's properties, while `ngOnInit` can be used to perform any additional initialization that needs to be done after the component's data has been loaded.\n\nFor example, the constructor might be used to set the initial value of a component's property, while `ngOnInit` might be used to subscribe to an observable or call a service.\n\nHere is an example of a constructor:\n\n```ts\nconstructor(private service: MyService) {}\n```\nAnd here is an example of `ngOnInit`:\n\n```ts\nngOnInit() {\n  this.service.getData().subscribe(data => {\n    this.data = data;\n  });\n}\n```\nIn this example, the constructor is used to inject the `MyService` dependency, while `ngOnInit` is used to subscribe to the `getData` observable and update the component's data property with the data that is returned.",
-      },
-      {
-        role: "model",
-        parts: "The constructor is called when an **Angular component** is created, while `ngOnInit` is called after the component's data has been initialized. This means that the constructor can be used to initialize the component's properties, while `ngOnInit` can be used to perform any additional initialization that needs to be done after the component's data has been loaded.\n\nFor example, the constructor might be used to set the initial value of a component's property, while `ngOnInit` might be used to subscribe to an observable or call a service.\n\nHere is an example of a constructor:\n\n```ts\nconstructor(private service: MyService) {}\n```\nAnd here is an example of `ngOnInit`:\n\n```ts\nngOnInit() {\n  this.service.getData().subscribe(data => {\n    this.data = data;\n  });\n}\n```\nIn this example, the constructor is used to inject the `MyService` dependency, while `ngOnInit` is used to subscribe to the `getData` observable and update the component's data property with the data that is returned.",
       }
     ]
   }
 
-  handleUserMessage(event: Event): void {
+  async handleUserMessage(event: Event): Promise<void> {
+
     const value: string = this.input.value ?? '';
 
     if (!value.trim()) {
@@ -130,15 +122,15 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    this.sendMessage(value).then(() => this.input.setValue(null));
-
+    await this.processAndSendUserMessage(value).then(() => this.input.setValue(null));
   }
 
-  public async sendMessage(text: string): Promise<void> {
+  public async processAndSendUserMessage(text: string): Promise<void> {
     const processedText: string = this.processText(text);
-    this.addMessage(processedText);
-    await this.sendMessageAndHandleResponse(text);
+    this.addUserMessageToUI(processedText);
+    await this.sendTextToChatService(text);
   }
+
 
   private processText(text: string): string {
     return text.split(/(```[^`]+```)/)
@@ -146,7 +138,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
       .join('');
   }
 
-  private addMessage(processedText: string): void {
+  private addUserMessageToUI(processedText: string): void {
     this.messages.push({
       id: uuid.v4(),
       text: processedText,
@@ -156,7 +148,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     this.scrollToBottom();
   }
 
-  private addBotMessage(text: string): void {
+  private addBotMessageToUI(text: string): void {
     this.messages.push({
       id: uuid.v4(),
       text: text,
@@ -166,16 +158,17 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
 
-  private async sendMessageAndHandleResponse(text: string): Promise<void> {
+  private async sendTextToChatService(text: string): Promise<void> {
     this.loading = true;
     try {
-      const result: GenerateContentResult = await this.chat.sendMessage(this.trimStringToByteLimit(text));
+      const trimmedText: string = this.trimStringToByteLimit(text);
+      const result: GenerateContentResult = await this.chat.sendMessage(trimmedText);
       const response: EnhancedGenerateContentResponse = result.response;
       if (response) {
-        this.addBotMessage(response.text());
+        this.addBotMessageToUI(response.text());
       }
-    } catch (error) {
-      window.alert(error)
+    } catch (error: any) {
+      this.addBotMessageToUI("ERROR: " + JSON.stringify(error?.message ?? error))
     } finally {
       this.loading = false;
     }
@@ -191,14 +184,14 @@ export class ChatComponent implements OnInit, AfterViewChecked {
 
   retry(text: string): void {
     if (this.isUserMessage(text)) {
-      this.sendMessage(text);
+      this.processAndSendUserMessage(text);
     }
   }
 
   isUserMessage(text: string) {
     //find original message
     const message: ChatMessage | undefined = this.messages.find((message: any) => message.text === text);
-    return (message && message.sender /* user message */);
+    return (message && message.sender);
   }
 
   showReply(text: string) {
@@ -215,12 +208,12 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
 
-  private trimStringToByteLimit(text: string, maxSize: number = this.MAX_SIZE_BYTES): string {
+  private trimStringToByteLimit(text: string, maxSize: number = this.MAX_INPUT_SIZE_BYTES): string {
     if (maxSize < 1) throw new Error("Invalid maxSize");
 
     const marker = "...";
     const markerSize: number = this.encoder.encode(marker).length;
-    maxSize = Math.min(maxSize, this.MAX_SIZE_BYTES);
+    maxSize = Math.min(maxSize, this.MAX_INPUT_SIZE_BYTES);
 
     if (text.length < maxSize / 2) {
       return text;

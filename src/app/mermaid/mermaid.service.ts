@@ -9,11 +9,6 @@ export class MermaidService {
 
         **MermaidJS for diagrams**
           \`\`\`mermaid
-     %%{init: {'themeVariables': {
-    'fontSize': '50px',
-    'lineWidth': 8,
-     'nodeBorder': '14
-px solid #000', 'mainBkg': '#EFEFEF' }}}%%
     graph TD
     AI("Artificial Intelligence")
     AI --> ML("Machine Learning")
