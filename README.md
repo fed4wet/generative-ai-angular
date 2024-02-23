@@ -1,7 +1,6 @@
-# Mini-Bard Angular client using Gemini API (via API key and Google AI Studio)
+# Angular client using Gemini API (via API key and Google AI Studio)
 
 ### Features
-- Support for Google AI and VertexAI APIs
 - Gemini API (generateContent and sendMessage)
 - Demonstration of Gemini for Text with text-to-speech (ElevenLabs)
 - Demonstration of Gemini for Chat with Rich Media support (markdown, code, emojis, formulas and diagrams)
@@ -36,7 +35,6 @@ Change these files to include your environment setup accordingly. For the exampl
 ```ts
 // src/environments/environment.development.ts
 export const environment = {
-  /// your setup
 };
 ```
 
